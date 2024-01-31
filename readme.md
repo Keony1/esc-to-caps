@@ -1,6 +1,10 @@
 # Caps Lock to Escape: Script for Windows Vim Users
 
-If you're a Windows user who relies on Vim and prefers to swap the functionality of the Escape key with Caps Lock, this script provides a convenient solution.
+If you're a Windows user who relies on Vim and prefers to swap the functionality of the Escape key with Caps Lock and, for some reason sometimes you need the Caps Lock in it's right position, this script provides a convenient solution.
+
+> I Know that you thought "Why he just not use Windows PowerToys?". And to be honest I was using.
+> But the problem is that it doesn't provide a convenient way to swap keys back and I needed the CAPSLOCK in its right position to do "unit control" on Dota 2
+> ... So this is the main reason that I made this little script
 
 ### Usage
 
