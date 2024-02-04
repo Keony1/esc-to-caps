@@ -1,4 +1,4 @@
-﻿toggle := 1 ; inicia CapsLock -> Esc 
+toggle := 1 ; start CapsLock -> Esc 
 capsLockStatus := 0
 
 $CapsLock::
@@ -24,7 +24,6 @@ $Esc::
 		if (!capsLockStatus) {
 			capsLockStatus := !toggleCapsLock
 			SetCapsLockState, On
-			
 		} else {
 			capsLockStatus := 0
 			SetCapsLockState, Off
@@ -34,6 +33,22 @@ $Esc::
 	}
 return
 
+; shift + capslock behaviour
++CapsLock::
+  if(toggle) {
+	SendInput, {Esc}
+  } else {
+		if (!capsLockStatus) {
+			capsLockStatus := !toggleCapsLock
+			SetCapsLockState, On
+		} else {
+			capsLockStatus := 0
+			SetCapsLockState, Off
+		}
+  }
+return
+
+; win + shift + c
 #!c::
 	toggle := !toggle
 	if (toggle) {
@@ -41,4 +56,4 @@ return
 	} else {
 		MsgBox, , , % "Esc -> Esc`nCapsLock -> CapsLock", 3s
 	}
-	
+return

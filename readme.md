@@ -34,5 +34,4 @@ If you encounter any issues or have suggestions for improvement, feel free to re
 
 ### Known issues
 
-1. Pressing `SHIFT` + `CAPSLOCK` when in swapped mode, the default `CAPSLOCK` behaviour will occur.
-2. If you are playing, or in a full screen software, the pop-up will minimize the software ¯\_(ツ)\_/¯
+1. If you are playing, or in a full screen software, the pop-up will minimize the software ¯\_(ツ)\_/¯
