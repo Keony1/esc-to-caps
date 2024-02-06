@@ -6,6 +6,10 @@ If you're a Windows user who relies on Vim and prefers to swap the functionality
 > But the problem is that it doesn't provide a convenient way to swap keys back and I needed the CAPSLOCK in its right position to do "unit control" on Dota 2
 > ... So this is the main reason that I made this little script
 
+### Note about Rust version
+
+You should probably use the `ahk` version. I did the Rust version because yes and because I wanted to experiment do a program that I would deal with OS stuff, so I implemented in Rust. The final version was a bit bigger than I though... Well, nothing is perfect
+
 ### Usage
 
 To activate the script, simply press `WIN` + `ALT` + `C`. This will toggle the functionality between the normal mode and the swapped mode.
