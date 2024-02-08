@@ -92,7 +92,7 @@ fn notification(hwnd: HWND) {
                 .encode_utf16()
                 .chain(Some(0))
                 .collect(),
-            false => "Esc -> Capslock\nCapslock -> Esc"
+            false => "Capslock -> Capslock\nEsc -> Esc"
                 .encode_utf16()
                 .chain(Some(0))
                 .collect(),
