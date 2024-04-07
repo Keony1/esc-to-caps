@@ -10,6 +10,10 @@ If you're a Windows user who relies on Vim and prefers to swap the functionality
 
 You should probably use the `ahk` version. I did the Rust version because yes and because I wanted to experiment do a program that I would deal with OS stuff, so I implemented in Rust. The final version was a bit bigger than I though... Well, nothing is perfect
 
+### Note about C version
+
+There has a C version, is lower in size then the other two versions and do the same thing
+
 ### Usage
 
 To activate the script, simply press `WIN` + `ALT` + `C`. This will toggle the functionality between the normal mode and the swapped mode.
