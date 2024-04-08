@@ -1,21 +1,47 @@
 #include <stdio.h>
+#include <string.h>
 #include <windows.h>
 
 #define ACTIVE (condition ? (TRUE) : (FALSE))
+#define WM_APPMSG (WM_USER + 1)
 BOOL condition = TRUE;
+NOTIFYICONDATA nid;
 
 LRESULT hook_proc(int code, WPARAM wParam, LPARAM lParam);
-void send_input(int vk, int flags);
-void notify();
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+HWND create_window_hwnd(HINSTANCE hInstance);
 
-int main() {
+void send_input(int vk, int flags);
+void update_icon();
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+                   LPSTR lpCmdLine, int nCmdShow) {
   HMODULE module = GetModuleHandleW(NULL);
   HHOOK hook = SetWindowsHookExW(WH_KEYBOARD_LL, hook_proc, module, 0);
 
-  if (RegisterHotKey(NULL, 1, MOD_ALT | MOD_WIN, 0x43) <= 0) {
+  if (RegisterHotKey(NULL, 1, MOD_ALT | MOD_WIN, 0x43) <= 0) { // 0x43 = c
     printf("Failed to register hotkey");
     return EXIT_FAILURE;
   }
+
+  HWND hWnd = create_window_hwnd(hInstance);
+
+  if (!hWnd) {
+    MessageBox(NULL, TEXT("Window Creation Failed!"), TEXT("Error"),
+               MB_ICONERROR);
+    return 0;
+  }
+
+  nid.cbSize = sizeof(NOTIFYICONDATA);
+  nid.hWnd = hWnd;
+  nid.hIcon = LoadIcon(NULL, IDI_ASTERISK), nid.uID = 1;
+  nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP | NIF_INFO;
+  nid.uVersion = NOTIFYICON_VERSION;
+  nid.uCallbackMessage = WM_APPMSG;
+  strcpy(nid.szTip, "esc_to_caps (ON)");
+
+  Shell_NotifyIcon(NIM_ADD, &nid);
+  Shell_NotifyIcon(NIM_SETVERSION, &nid);
 
   MSG msg;
   while (GetMessageW(&msg, NULL, 0, 0) != 0) {
@@ -24,8 +50,7 @@ int main() {
 
     if (msg.message == WM_HOTKEY) {
       if (msg.wParam == 1) {
-        condition = !condition;
-        notify();
+        update_icon();
       }
     }
   }
@@ -35,15 +60,12 @@ int main() {
   return EXIT_SUCCESS;
 }
 
-void notify() {
-  const wchar_t *title = L"esc_to_caps";
-  if (condition) {
-    const wchar_t *body = L"Capslock -> Esc\nEsc -> Capslock";
-    MessageBoxW(NULL, body, title, MB_OK);
-  } else {
-    const wchar_t *body = L"Back to normal";
-    MessageBoxW(NULL, body, title, MB_OK);
-  }
+void update_icon() {
+  condition = !condition;
+  ACTIVE ? strcpy(nid.szTip, "esc_to_caps (ON)")
+         : strcpy(nid.szTip, "esc_to_caps (OFF)");
+  nid.hIcon = ACTIVE ? LoadIcon(NULL, IDI_ASTERISK) : LoadIcon(NULL, IDI_HAND);
+  Shell_NotifyIcon(NIM_MODIFY, &nid);
 }
 
 void send_input(int vk, int flags) {
@@ -78,4 +100,44 @@ LRESULT hook_proc(int code, WPARAM wParam, LPARAM lParam) {
   }
 
   CallNextHookEx(NULL, code, wParam, lParam);
+}
+
+HWND create_window_hwnd(HINSTANCE hInstance) {
+  LPCSTR class_name = "EscToCapsClass";
+  WNDCLASS wc = {0};
+  wc.lpfnWndProc = WndProc;
+  wc.hInstance = hInstance;
+  wc.lpszClassName = class_name;
+
+  if (!RegisterClass(&wc)) {
+    MessageBox(NULL, TEXT("Window Registration Failed!"), TEXT("Error"),
+               MB_ICONERROR);
+    return 0;
+  }
+
+  HWND hWnd = CreateWindowEx(0, class_name, TEXT(""), 0, 0, 0, 0, 0,
+                             HWND_MESSAGE, NULL, hInstance, NULL);
+  return hWnd;
+}
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
+                         LPARAM lParam) {
+  switch (message) {
+  case WM_DESTROY:
+    PostQuitMessage(0);
+    break;
+  case WM_APPMSG:
+    switch (lParam) {
+    case WM_LBUTTONDOWN:
+    case WM_RBUTTONDOWN:
+    case WM_MOUSEWHEEL:
+      update_icon();
+      break;
+    }
+    break;
+  default:
+    break;
+  }
+
+  return DefWindowProc(hWnd, message, wParam, lParam);
 }
