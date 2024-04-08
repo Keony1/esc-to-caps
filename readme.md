@@ -12,17 +12,21 @@ You should probably use the `ahk` version. I did the Rust version because yes an
 
 ### Note about C version
 
-There has a C version, is lower in size then the other two versions and do the same thing
+There has a C version, is lower in size then the other two versions and do the same thing but better, it sends a hardware keystroke and it uses icons istead of those popups
 
 ### Usage
 
 To activate the script, simply press `WIN` + `ALT` + `C`. This will toggle the functionality between the normal mode and the swapped mode.
-Pressing these buttons will display a 3seconds pop-up to notify that the buttons are toggled
-
-![Normal Mode](./docs/normal.png)
+Pressing these buttons will ~~display a 3seconds pop-up~~ show a icon to inform if its in swapped or normal mode
 
 In the normal mode, the keys function as usual. When toggled to the swapped mode, the Escape key acts as Caps Lock, and vice versa.
 
+### Visual feedback
+
+Normal
+![Normal Mode](./docs/normal.png)
+
+Swapped
 ![Swapped Mode](./docs/swapped.png)
 
 ### Setting up Auto Startup
@@ -42,4 +46,4 @@ If you encounter any issues or have suggestions for improvement, feel free to re
 
 ### Known issues
 
-1. If you are playing, or in a full screen software, the pop-up will minimize the software ¯\_(ツ)\_/¯
+~~1. If you are playing, or in a full screen software, the pop-up will minimize the software ¯\_(ツ)\_/¯~~
